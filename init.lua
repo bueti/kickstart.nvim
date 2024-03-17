@@ -151,6 +151,111 @@ require('lazy').setup({
   --  This is equivalent to:
   --    require('Comment').setup({})
 
+  -- debugging
+  {
+    'williamboman/mason.nvim',
+    config = function()
+      require('mason').setup()
+    end,
+  },
+  {
+    'mfussenegger/nvim-dap',
+    keys = {
+      {
+        '<leader>dc',
+        function()
+          require('dap').continue()
+        end,
+        desc = 'Start/Continue Debugger',
+      },
+      {
+        '<leader>db',
+        function()
+          require('dap').toggle_breakpoint()
+        end,
+        desc = 'Add Breakpoint',
+      },
+      {
+        '<leader>dt',
+        function()
+          require('dap').terminate()
+        end,
+        desc = 'Terminate Debugger',
+      },
+      {
+        '<F1>',
+        function()
+          require('dap').step_over()
+        end,
+        desc = 'Step Over',
+      },
+      {
+        '<F2>',
+        function()
+          require('dap').step_into()
+        end,
+        desc = 'Step Into',
+      },
+      {
+        '<F3>',
+        function()
+          require('dap').step_last()
+        end,
+        desc = 'Step Last',
+      },
+    },
+  },
+  {
+    'jay-babu/mason-nvim-dap.nvim',
+    config = function()
+      require('mason-nvim-dap').setup {
+        ensure_installed = { 'delve' },
+        automatic_installation = true,
+      }
+    end,
+  },
+  {
+    'rcarriga/nvim-dap-ui',
+    dependencies = 'mfussenegger/nvim-dap',
+    keys = {
+      {
+        '<leader>du',
+        function()
+          require('dapui').toggle()
+        end,
+        desc = 'Toggle Debugger UI',
+      },
+    },
+    config = function()
+      local dap = require 'dap'
+      local dapui = require 'dapui'
+      dapui.setup()
+      dap.listeners.after.event_initialized['dapui_config'] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated['dapui_config'] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited['dapui_config'] = function()
+        dapui.close()
+      end
+    end,
+  },
+  {
+    'leoluz/nvim-dap-go',
+    dependencies = 'mfussenegger/nvim-dap',
+    config = function() -- This is the function that runs, AFTER loading
+      require('dap-go').setup()
+    end,
+  },
+  {
+    'theHamsta/nvim-dap-virtual-text',
+    config = function()
+      require('nvim-dap-virtual-text').setup {
+        enabled = true,
+      }
+    end,
+  },
   -- Folding plugin, kinda like vscode
   { 'kevinhwang91/nvim-ufo', dependencies = { 'kevinhwang91/promise-async' } },
 
@@ -306,6 +411,7 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
       pcall(require('telescope').load_extension, 'session-lens')
+      pcall(require('telescope').load_extension, 'dap')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
