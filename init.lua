@@ -139,24 +139,13 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-
-  -- NOTE: Plugins can also be added by using a table,
-  -- with the first argument being the link and the following
-  -- keys can be used to configure plugin behavior/loading/etc.
-  --
-  -- Use `opts = {}` to force a plugin to be loaded.
-  --
-  --  This is equivalent to:
-  --    require('Comment').setup({})
+  -- Detect tabstop and shiftwidth automatically
+  'tpope/vim-sleuth',
 
   -- debugging
   {
     'williamboman/mason.nvim',
-    config = function()
-      require('mason').setup()
-    end,
+    opts = {},
   },
   {
     'mfussenegger/nvim-dap',
@@ -207,12 +196,10 @@ require('lazy').setup({
   },
   {
     'jay-babu/mason-nvim-dap.nvim',
-    config = function()
-      require('mason-nvim-dap').setup {
-        ensure_installed = { 'delve' },
-        automatic_installation = true,
-      }
-    end,
+    opts = {
+      ensure_installed = { 'delve' },
+      automatic_installation = true,
+    },
   },
   {
     'rcarriga/nvim-dap-ui',
@@ -244,17 +231,11 @@ require('lazy').setup({
   {
     'leoluz/nvim-dap-go',
     dependencies = 'mfussenegger/nvim-dap',
-    config = function() -- This is the function that runs, AFTER loading
-      require('dap-go').setup()
-    end,
+    opts = {},
   },
   {
     'theHamsta/nvim-dap-virtual-text',
-    config = function()
-      require('nvim-dap-virtual-text').setup {
-        enabled = true,
-      }
-    end,
+    opts = { enabled = true },
   },
   -- Folding plugin, kinda like vscode
   { 'kevinhwang91/nvim-ufo', dependencies = { 'kevinhwang91/promise-async' } },
@@ -282,10 +263,27 @@ require('lazy').setup({
       'MunifTanjim/nui.nvim',
       -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
     },
+    config = function()
+      require('neo-tree').setup {}
+    end,
   },
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
+
+  -- Autopair
+  {
+    'windwp/nvim-autopairs',
+    -- Optional dependency
+    dependencies = { 'hrsh7th/nvim-cmp' },
+    config = function()
+      require('nvim-autopairs').setup {}
+      -- If you want to automatically add `(` after selecting a function or method
+      local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
+      local cmp = require 'cmp'
+      cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
+    end,
+  },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following lua:
