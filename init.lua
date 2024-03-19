@@ -104,6 +104,8 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- Keybindings for Lazygit
+vim.keymap.set('n', '<F7>', ':FloatermNew! lazygit<CR>')
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -141,132 +143,24 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
+  'jjo/vim-cue',
+  'voldikss/vim-floaterm',
 
-  -- debugging
-  {
-    'williamboman/mason.nvim',
-    opts = {},
-  },
-  {
-    'mfussenegger/nvim-dap',
-    keys = {
-      {
-        '<leader>dc',
-        function()
-          require('dap').continue()
-        end,
-        desc = 'Start/Continue Debugger',
-      },
-      {
-        '<leader>db',
-        function()
-          require('dap').toggle_breakpoint()
-        end,
-        desc = 'Add Breakpoint',
-      },
-      {
-        '<leader>dt',
-        function()
-          require('dap').terminate()
-        end,
-        desc = 'Terminate Debugger',
-      },
-      {
-        '<F1>',
-        function()
-          require('dap').step_over()
-        end,
-        desc = 'Step Over',
-      },
-      {
-        '<F2>',
-        function()
-          require('dap').step_into()
-        end,
-        desc = 'Step Into',
-      },
-      {
-        '<F3>',
-        function()
-          require('dap').step_last()
-        end,
-        desc = 'Step Last',
-      },
-    },
-  },
-  {
-    'jay-babu/mason-nvim-dap.nvim',
-    opts = {
-      ensure_installed = { 'delve' },
-      automatic_installation = true,
-    },
-  },
-  {
-    'rcarriga/nvim-dap-ui',
-    dependencies = 'mfussenegger/nvim-dap',
-    keys = {
-      {
-        '<leader>du',
-        function()
-          require('dapui').toggle()
-        end,
-        desc = 'Toggle Debugger UI',
-      },
-    },
-    config = function()
-      local dap = require 'dap'
-      local dapui = require 'dapui'
-      dapui.setup()
-      dap.listeners.after.event_initialized['dapui_config'] = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated['dapui_config'] = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited['dapui_config'] = function()
-        dapui.close()
-      end
-    end,
-  },
-  {
-    'leoluz/nvim-dap-go',
-    dependencies = 'mfussenegger/nvim-dap',
-    opts = {},
-  },
-  {
-    'theHamsta/nvim-dap-virtual-text',
-    opts = { enabled = true },
-  },
   -- Folding plugin, kinda like vscode
   { 'kevinhwang91/nvim-ufo', dependencies = { 'kevinhwang91/promise-async' } },
 
   -- Session Manager
-  {
-    'rmagatti/auto-session',
-    opts = {
-      log_level = 'error',
-      auto_session_enable_last_session = true,
-      auto_session_suppress_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
-    },
-  },
+  -- {
+  --   'rmagatti/auto-session',
+  --   opts = {
+  --     log_level = 'error',
+  --     auto_session_enable_last_session = true,
+  --     auto_session_suppress_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
+  --   },
+  -- },
 
   -- Session integration w/ Telescope
-  'rmagatti/session-lens',
-
-  -- File Browser
-  {
-    'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v3.x',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-      'MunifTanjim/nui.nvim',
-      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
-    },
-    config = function()
-      require('neo-tree').setup {}
-    end,
-  },
+  -- 'rmagatti/session-lens',
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
@@ -408,7 +302,7 @@ require('lazy').setup({
       -- Enable telescope extensions, if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
-      pcall(require('telescope').load_extension, 'session-lens')
+      -- pcall(require('telescope').load_extension, 'session-lens')
       pcall(require('telescope').load_extension, 'dap')
 
       -- See `:help telescope.builtin`
@@ -891,7 +785,7 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {
   ui = {
     -- If you have a Nerd Font, set icons to an empty table which will use the
@@ -915,4 +809,4 @@ require('lazy').setup({
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
+-- vim: ts=2 sts=2 sw=2 e
