@@ -149,19 +149,6 @@ require('lazy').setup({
   -- Folding plugin, kinda like vscode
   { 'kevinhwang91/nvim-ufo', dependencies = { 'kevinhwang91/promise-async' } },
 
-  -- Session Manager
-  -- {
-  --   'rmagatti/auto-session',
-  --   opts = {
-  --     log_level = 'error',
-  --     auto_session_enable_last_session = true,
-  --     auto_session_suppress_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
-  --   },
-  -- },
-
-  -- Session integration w/ Telescope
-  -- 'rmagatti/session-lens',
-
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
 
@@ -302,7 +289,6 @@ require('lazy').setup({
       -- Enable telescope extensions, if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
-      -- pcall(require('telescope').load_extension, 'session-lens')
       pcall(require('telescope').load_extension, 'dap')
 
       -- See `:help telescope.builtin`
@@ -360,28 +346,6 @@ require('lazy').setup({
       { 'folke/neodev.nvim', opts = {} },
     },
     config = function()
-      -- Brief Aside: **What is LSP?**
-      --
-      -- LSP is an acronym you've probably heard, but might not understand what it is.
-      --
-      -- LSP stands for Language Server Protocol. It's a protocol that helps editors
-      -- and language tooling communicate in a standardized fashion.
-      --
-      -- In general, you have a "server" which is some tool built to understand a particular
-      -- language (such as `gopls`, `lua_ls`, `rust_analyzer`, etc). These Language Servers
-      -- (sometimes called LSP servers, but that's kind of like ATM Machine) are standalone
-      -- processes that communicate with some "client" - in this case, Neovim!
-      --
-      -- LSP provides Neovim with features like:
-      --  - Go to definition
-      --  - Find references
-      --  - Autocompletion
-      --  - Symbol Search
-      --  - and more!
-      --
-      -- Thus, Language Servers are external tools that must be installed separately from
-      -- Neovim. This is where `mason` and related plugins come into play.
-      --
       -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
       -- and elegantly composed help section, `:help lsp-vs-treesitter`
 
@@ -487,6 +451,8 @@ require('lazy').setup({
           },
           staticcheck = true,
           gofumpt = true,
+          completeUnimported = true,
+          usePlaceholders = true,
         },
         -- pyright = {},
         -- rust_analyzer = {},
@@ -528,6 +494,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format lua code
+        'gopls', -- Used for Go
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -593,12 +560,12 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
       },
       'saadparwaiz1/cmp_luasnip',
@@ -741,7 +708,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc', 'go', 'json', 'yaml' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
