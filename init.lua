@@ -283,6 +283,23 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        defaults = {
+          file_ignore_patterns = {
+            'node_modules',
+            '.git',
+            '.cache',
+            '.venv',
+            '.pytest_cache',
+            '.mypy_cache',
+            '.tox',
+            '.vscode',
+            '.idea',
+            '.DS_Store',
+            '.gitignore',
+            '.gitmodules',
+            '.gitattributes',
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
