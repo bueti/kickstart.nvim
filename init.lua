@@ -515,8 +515,37 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format lua code
-        'gopls', -- Used for Go
+        'bashls',
+        'dockerls',
+        'jsonls',
+        'helm_ls',
+        'marksman',
+        'pyright',
+        'lua_ls',
+        'terraformls',
+        'yamlls',
+        -- Formatter
+        'prettier',
+        'stylua',
+        'shfmt',
+        -- Linter
+        'ansible-lint',
+        'codespell',
+        'commitlint',
+        'hadolint',
+        'shellcheck',
+        'selene',
+        'tflint',
+        'yamllint',
+        -- Go
+        'gopls',
+        'gofumpt',
+        'goimports',
+        'gomodifytags',
+        'golangci-lint',
+        'gotests',
+        'iferr',
+        'impl',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -549,15 +578,35 @@ require('lazy').setup({
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
         }
       end,
+      config_function = function(opts)
+        local conform = require 'conform'
+        conform.setup(opts)
+        conform.formatters.shfmt = {
+          prepend_args = { '-i', '2' }, -- 2 spaces instead of tab
+        }
+        conform.formatters.stylua = {
+          prepend_args = { '--indent-type', 'Spaces', '--indent-width', '2' }, -- 2 spaces instead of tab
+        }
+        conform.formatters.yamlfmt = {
+          prepend_args = { '-formatter', 'indent=2,include_document_start=true,retain_line_breaks_single=true' },
+        }
+        vim.g.disable_autoformat = vim.g.config.plugins.conform.disable_autoformat
+        vim.api.nvim_create_user_command('ToggleAutoformat', function()
+          utils.notify('Toggling autoformat', vim.log.levels.INFO, 'conform.nvim')
+          vim.g.disable_autoformat = vim.g.disable_autoformat == false and true or false
+        end, { desc = 'Toggling autoformat' })
+        vim.keymap.set('n', '<leader>tF', '<cmd>ToggleAutoformat<cr>', { desc = 'Toggle format on save' })
+      end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use a sub-list to tell conform to run *until* a formatter
-        -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
         go = { 'goimports', 'gofmt' },
+        javascript = { 'prettier' },
+        json = { 'prettier' },
+        markdown = { 'prettier' },
+        python = { 'isort', 'ruff_format' },
+        sh = { 'shfmt' },
+        terraform = { 'terraform_fmt' },
+        yaml = { 'yamlfmt' },
       },
     },
   },
@@ -730,7 +779,24 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc', 'go', 'json', 'yaml' },
+      ensure_installed = {
+        'bash',
+        'dockerfile',
+        'html',
+        'hcl',
+        'lua',
+        'markdown',
+        'markdown',
+        'markdown_inline',
+        'python',
+        'regex',
+        'toml',
+        'vim',
+        'vimdoc',
+        'go',
+        'json',
+        'yaml',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
