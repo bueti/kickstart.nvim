@@ -105,8 +105,8 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- Remap <C-u> and <C-d> to center the cursor after jumping
-vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Move cursor up and center' })
-vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Move cursor down and center' })
+-- vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Move cursor up and center' })
+-- vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Move cursor down and center' })
 
 -- Keybindings for Lazygit
 vim.keymap.set('n', '<F7>', ':FloatermNew! lazygit<CR>')
@@ -772,6 +772,7 @@ require('lazy').setup({
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
+      require('mini.map').setup()
     end,
   },
 
