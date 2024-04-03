@@ -524,7 +524,7 @@ require('lazy').setup({
         'lua_ls',
         'terraformls',
         'yamlls',
-        'solargraph',
+        -- 'solargraph',
         -- Formatter
         'prettier',
         'stylua',
