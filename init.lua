@@ -524,11 +524,13 @@ require('lazy').setup({
         'lua_ls',
         'terraformls',
         'yamlls',
+        'solargraph',
         -- Formatter
         'prettier',
         'stylua',
         'shfmt',
         -- Linter
+        'rubocop',
         'ansible-lint',
         'codespell',
         'commitlint',
