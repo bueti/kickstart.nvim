@@ -151,9 +151,7 @@ require('lazy').setup({
   'voldikss/vim-floaterm',
   {
     'mbbill/undotree',
-    opts = {
-      vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle),
-    },
+    vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle),
   },
 
   -- Folding plugin, kinda like vscode
