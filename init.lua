@@ -149,6 +149,7 @@ require('lazy').setup({
   'tpope/vim-sleuth',
   'jjo/vim-cue',
   'voldikss/vim-floaterm',
+  'mbbill/undotree',
 
   -- Folding plugin, kinda like vscode
   { 'kevinhwang91/nvim-ufo', dependencies = { 'kevinhwang91/promise-async' } },
@@ -656,13 +657,20 @@ require('lazy').setup({
       luasnip.config.setup {}
 
       cmp.setup {
+        { name = 'copilot', group_index = 2 },
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
           end,
         },
         completion = { completeopt = 'menu,menuone,noinsert' },
-
+        -- formatting = {
+        --   format = lspkind.cmp_format {
+        --     mode = 'symbol',
+        --     max_width = 50,
+        --     symbol_map = { Copilot = '' },
+        --   },
+        -- },
         -- For an understanding of why these mappings were
         -- chosen, you will need to read `:help ins-completion`
         --
@@ -866,5 +874,18 @@ require('lazy').setup({
   },
 })
 
+local copilot_on = true
+vim.api.nvim_create_user_command('CopilotToggle', function()
+  if copilot_on then
+    vim.cmd 'Copilot disable'
+    print 'Copilot OFF'
+  else
+    vim.cmd 'Copilot enable'
+    print 'Copilot ON'
+  end
+  copilot_on = not copilot_on
+end, { nargs = 0 })
+vim.keymap.set('', '<M-\\>', ':CopilotToggle<CR>', { noremap = true, silent = true })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 e
+-- vim: ts=2 sts=2 sw=2
