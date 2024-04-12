@@ -149,7 +149,12 @@ require('lazy').setup({
   'tpope/vim-sleuth',
   'jjo/vim-cue',
   'voldikss/vim-floaterm',
-  'mbbill/undotree',
+  {
+    'mbbill/undotree',
+    opts = {
+      vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle),
+    },
+  },
 
   -- Folding plugin, kinda like vscode
   { 'kevinhwang91/nvim-ufo', dependencies = { 'kevinhwang91/promise-async' } },
