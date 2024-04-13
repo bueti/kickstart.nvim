@@ -149,6 +149,7 @@ require('lazy').setup({
   'tpope/vim-sleuth',
   'jjo/vim-cue',
   'voldikss/vim-floaterm',
+  'mfussenegger/nvim-ansible',
   {
     'mbbill/undotree',
     vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle),
@@ -488,9 +489,19 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
-        --
-
+        tsserver = {},
+        ansiblels = {
+          settings = {
+            ansible = {
+              validation = {
+                lint = {
+                  enabled = false,
+                },
+              },
+            },
+          },
+        },
+        terraformls = {},
         lua_ls = {
           -- cmd = {...},
           -- filetypes { ...},
@@ -797,6 +808,7 @@ require('lazy').setup({
         'bash',
         'dockerfile',
         'html',
+        'terraform',
         'hcl',
         'lua',
         'markdown',
